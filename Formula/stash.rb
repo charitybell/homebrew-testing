@@ -13,8 +13,7 @@ class Stash < Formula
   depends_on "ffmpeg"
 
   def install
-    system "make", "pre-ui"
-    system "make", "generate"
+    ENV.deparallelize
     system "make"
 
     bin.install "stash"
