@@ -1,8 +1,8 @@
 class Stash < Formula
   desc "Organizer for your porn, written in Go"
   homepage "https://github.com/stashapp/stash"
-  url "https://github.com/stashapp/stash/archive/refs/tags/v0.20.1.tar.gz"
-  sha256 "55afac710bfa76de10c77da82534344075ec9ab6ee8de237449293321a24fd18"
+  url "https://github.com/stashapp/stash/archive/refs/tags/v0.20.2.tar.gz"
+  sha256 "1eaef744ce856afe71857381fb832c29fc0c43eefc6336c60c30be36b929c71b"
   license "AGPL-3.0-only"
 
   depends_on "gcc" => :build
