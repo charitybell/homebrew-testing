@@ -53,7 +53,8 @@ jobs:
 
       - name: build bottle (${{ matrix.formula }})
         run: |
-          brew install --build-bottle ${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)
-          brew bottle --force-core-tap --no-rebuild --json !$
-          brew bottle --merge --write *.bottle.json --merge --write
+          FORMULA_NAME="${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)"
+          brew install --build-bottle "$FORMULA_NAME"
+          brew bottle --force-core-tap --no-rebuild --json "$FORMULA_NAME"
+          brew bottle --merge --write *.bottle.json
           ls
