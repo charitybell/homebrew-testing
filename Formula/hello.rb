@@ -1,5 +1,5 @@
 class Hello < Formula
-  revision 7
+  revision 8
   desc "gnu hello"
   homepage "homepage"
   url "https://ftp.gnu.org/gnu/hello/hello-2.12.tar.gz"
@@ -7,11 +7,15 @@ class Hello < Formula
   license "AGPL-3.0-only"
 
   depends_on "gcc" => :build
+  depends_on "go" => :build
+  depends_on "node" => :build
+  depends_on "yarn" => :build
+  depends_on "ffmpeg"
 
   def install
-    system "./configure"
+    ENV.deparallelize
     system "make"
 
-    bin.install "hello"
+    bin.install "stash"
   end
 end
