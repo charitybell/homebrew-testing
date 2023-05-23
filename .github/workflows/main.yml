@@ -23,6 +23,12 @@ jobs:
         with:
           files: Formula/*.rb
           json: true
+          
+      - name: print changed files
+        id: print-changes
+        run: |
+          echo ${{ steps.changed-files.outputs.all_changed_files }}
+          echo ${{ fromJSON(steps.changed-files.outputs.all_changed_files) }}
   build:
     needs: prepare
     runs-on: ubuntu-latest
