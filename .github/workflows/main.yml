@@ -1,4 +1,4 @@
-name: build and release
+name: audit pr
 
 on: [pull_request]
 
@@ -24,7 +24,7 @@ jobs:
         id: set-output-matrix
         run: |
           echo "matrix={\"formula\": ${{ steps.changed-files.outputs.all_changed_files }} }" >> $GITHUB_OUTPUT
-  build:
+  audit:
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
@@ -32,13 +32,11 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
 
       - name: Set up Homebrew
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: build bottle (${{ matrix.formula }})
+      - name: audit bottle (${{ matrix.formula }})
         run: |
           brew audit --online ${{ matrix.formula }}
