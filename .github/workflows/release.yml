@@ -55,6 +55,6 @@ jobs:
 
       - name: build bottle (${{ matrix.formula }})
         run: |
-          brew install --build-bottle ${{ github.repository }}/$(basename ${{ matrix.formula }})
+          brew install --build-bottle ${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)
           brew bottle --write !$
           ls
