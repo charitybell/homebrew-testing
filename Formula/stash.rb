@@ -1,5 +1,5 @@
 class Stash < Formula
-  revision 2
+  revision 3
   desc "Organizer for your porn, written in Go"
   homepage "https://github.com/stashapp/stash"
   url "https://github.com/stashapp/stash/archive/refs/tags/v0.20.2.tar.gz"
