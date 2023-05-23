@@ -50,11 +50,10 @@ jobs:
         id: set-up-tap
         run: |
           mkdir -p $(brew --prefix)/Library/Taps/${{ github.actor }}
-          echo $GITHUB_WORKSPACE
-          ls -l $(brew --prefix)/Library/Taps/${{ github.actor }}
 
       - name: build bottle (${{ matrix.formula }})
         run: |
           brew install --build-bottle ${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)
-          brew bottle --write !$
+          brew bottle --force-core-tap --no-rebuild --json !$
+          brew bottle --merge --write *.bottle.json --merge --write
           ls
