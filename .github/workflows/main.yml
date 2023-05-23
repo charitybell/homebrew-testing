@@ -32,4 +32,4 @@ jobs:
     steps:
       - name: build bottle
         run: |
-          brew install --build-bottle ${{ formula }}
+          brew install --build-bottle ${{ matrix.formula }}
