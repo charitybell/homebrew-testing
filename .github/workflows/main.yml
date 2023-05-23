@@ -5,7 +5,7 @@ on: [pull_request]
 jobs:  
   prepare:
     outputs:
-      changed_files: ${{ steps.changed-files.outputs.all_changed_files }}
+      matrix: ${{ steps.set-output-matrix.outputs.matrix }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -24,17 +24,16 @@ jobs:
           files: Formula/*.rb
           json: true
           
-      - name: print changed files
-        id: print-changes
+      - name: set output matrix
+        id: set-output-matrix
         run: |
-          echo '${{ steps.changed-files.outputs.all_changed_files }}'
+          echo 'matrix={\"formula\": ${{ steps.changed-files.outputs.all_changed_files }} }' >> $GITHUB_OUTPUT
 
   build:
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        formula: ${{ fromJSON(needs.prepare.outputs.changed_files) }}
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
     steps:
       - name: build bottle
         run: |
