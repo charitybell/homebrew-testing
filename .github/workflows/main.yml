@@ -32,9 +32,10 @@ jobs:
   build:
     needs: prepare
     runs-on: ubuntu-latest
-    strategy:
-      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+    #strategy:
+    #  matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
     steps:
       - name: build bottle
         run: |
-          brew install --build-bottle ${{ matrix.formula }}
+          #brew install --build-bottle ${{ matrix.formula }}
+          echo '${{ needs.prepare.outputs.matrix }}'
