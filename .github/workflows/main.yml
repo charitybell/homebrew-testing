@@ -45,4 +45,4 @@ jobs:
 
       - name: build bottle (${{ matrix.formula }})
         run: |
-          brew install --build-bottle ${{ matrix.formula }}
+          brew audit --online ${{ matrix.formula }}
