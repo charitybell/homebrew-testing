@@ -50,8 +50,8 @@ jobs:
         id: set-up-tap
         run: |
           mkdir -p $(brew --prefix)/Library/Taps/${{ github.actor }}
-          cp -r $GITHUB_WORKSPACE !$
-          mv !$/$(basename $GITHUB_WORKSPACE) !$/$(basename ${{ github.repository }})
+          cp -r $GITHUB_WORKSPACE $(brew --prefix)/Library/Taps/${{ github.actor }}
+          mv $(brew --prefix)/Library/Taps/${{ github.actor }}/$(basename $GITHUB_WORKSPACE) $(brew --prefix)/Library/Taps/${{ github.actor }}/$(basename ${{ github.repository }})
 
       - name: build bottle (${{ matrix.formula }})
         run: |
