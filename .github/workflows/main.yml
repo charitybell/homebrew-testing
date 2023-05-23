@@ -27,8 +27,8 @@ jobs:
       - name: set output matrix
         id: set-output-matrix
         run: |
-          #echo 'matrix={\"formula\": ${{ steps.changed-files.outputs.all_changed_files }} }' >> $GITHUB_OUTPUT
-          echo "matrix={\"formula\": [\"Formula/stash.rb\"]}" >> $GITHUB_OUTPUT
+          echo "matrix={\"formula\": ${{ steps.changed-files.outputs.all_changed_files }} }" >> $GITHUB_OUTPUT
+          #echo "matrix={\"formula\": [\"Formula/stash.rb\"]}" >> $GITHUB_OUTPUT
 
   build:
     needs: prepare
