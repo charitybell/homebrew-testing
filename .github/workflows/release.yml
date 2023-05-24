@@ -63,7 +63,7 @@ jobs:
           FORMULA_INFO="$(brew list --versions $FORMULA_NAME)"
           FORMULA_NAME="$(echo $FORMULA_INFO|cut -d ' ' -f 1)"
           FORMULA_VERSION="$(echo $FORMULA_INFO|cut -d ' ' -f 2)"
-          FORMULA_REVISION="$(grep -m 1 revision hello.rb|awk '{ print $2 }')"
+          FORMULA_REVISION="$(grep -m 1 revision ${{ matrix.formula }}|awk '{ print $2 }')"
           git tag -a "${FORMULA_NAME}-v${FORMULA_version}-rev${FORMULA_REVISION}"
           git push origin main
           git push --tags
