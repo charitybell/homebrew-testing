@@ -35,11 +35,13 @@ jobs:
   build:
     needs: prepare
     if: ${{ needs.prepare.outputs.formula != '[]' }}
+    outputs:
+      tag-message: ${{ steps.build-bottle.outputs.tag-message }}
     strategy:
       matrix:
         formula: ${{ fromJSON(needs.prepare.outputs.formula) }}
         os: [ubuntu-latest, macos-latest]
-      max-parallel: 1
+      #max-parallel: 1
     runs-on: ${{ matrix.os }}
     steps:
       - name: checkout
@@ -60,12 +62,36 @@ jobs:
           FORMULA_NAME="${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)"
           brew install --build-bottle "$FORMULA_NAME"
           brew bottle --force-core-tap --no-rebuild --json "$FORMULA_NAME"
-          brew bottle --merge --write *.bottle.json
+          #brew bottle --merge --write *.bottle.json
           FORMULA_INFO="$(brew list --versions $FORMULA_NAME)"
           FORMULA_NAME="$(echo $FORMULA_INFO|cut -d ' ' -f 1)"
           FORMULA_VERSION="$(echo $FORMULA_INFO|cut -d ' ' -f 2)"
           TAG_MESSAGE="${FORMULA_NAME}-${FORMULA_VERSION}"
           echo "tag-message=$TAG_MESSAGE" >> $GITHUB_OUTPUT
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: formula-bottles
+          path: |
+            *.bottle.tar.gz
+            *.bottle.json
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: formula-bottles
+
+      - run: |
+          brew bottle --merge --write *.bottle.json
 
       - name: Try pushing
         uses: Homebrew/actions/git-try-push@master
@@ -76,12 +102,12 @@ jobs:
 
       - uses: thejeff77/action-push-tag@v1.0.0
         with:
-          tag: ${{ steps.build-bottle.outputs.tag-message }}
-          message: ${{ steps.build-bottle.outputs.tag-message }}
+          tag: ${{ needs.build.outputs.tag-message }}
+          message: ${{ needs.build.outputs.tag-message }}
 
       - name: Release
         uses: softprops/action-gh-release@v1
         if: success()
         with:
           files: '*.bottle.tar.gz'
-          tag_name: ${{ steps.build-bottle.outputs.tag-message }}
+          tag_name: ${{ needs.build.outputs.tag-message }}
