@@ -32,10 +32,15 @@ jobs:
       run: |
         echo "matrix={\"formula\": ${{ steps.changed-files.outputs.all_changed_files }} }" >> $GITHUB_OUTPUT
 
+  test:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo '${{ needs.prepare.outpus.matrix.formula }}'
   build:
     needs: prepare
     runs-on: ubuntu-latest
-    if: ${{ needs.prepare.outputs.matrix.formula != '[]' && needs.prepare.outputs.matrix.formula != '' }}
+    if: ${{ needs.prepare.outputs.matrix.formula != '[]' }}
     strategy:
       matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
     steps:
