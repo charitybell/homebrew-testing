@@ -1,5 +1,4 @@
-class Hello < Formula
-  revision 22
+class Hello2 < Formula
   desc "gnu hello"
   homepage "homepage"
   url "https://ftp.gnu.org/gnu/hello/hello-2.12.tar.gz"
@@ -7,7 +6,7 @@ class Hello < Formula
   license "AGPL-3.0-only"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "2053c5dc595b893b10ad358c5682778f50d2f92ebd10bf862caded8fb564797e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "87f572f527592679b82f9280fae94b9c451998da168b0eba1e60dd7065659dba"
   end
 
   depends_on "gcc" => :build
