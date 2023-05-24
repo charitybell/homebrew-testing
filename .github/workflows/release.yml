@@ -55,6 +55,7 @@ jobs:
           mkdir -p $(brew --prefix)/Library/Taps/${{ github.actor }}
 
       - name: build bottle (${{ matrix.formula }})
+        id: build-bottle
         run: |
           FORMULA_NAME="${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)"
           brew install --build-bottle "$FORMULA_NAME"
@@ -65,12 +66,25 @@ jobs:
           FORMULA_VERSION="$(echo $FORMULA_INFO|cut -d ' ' -f 2)"
           FORMULA_REVISION="$(grep -m 1 revision ${{ matrix.formula }}|awk '{ print $2 }')"
           TAG_MESSAGE="${FORMULA_NAME}-v${FORMULA_version}-rev${FORMULA_REVISION}"
-          git tag -a "$TAG_MESSAGE" -m "$TAG_MESSAGE"
-          git push origin main
-          git push --tags
+          echo "tag-message=$TAG_MESSAGE" >> $GITHUB_OUTPUT
+          #git tag -a "$TAG_MESSAGE" -m "$TAG_MESSAGE"
+          #git remote set-url
+          #git push origin main
+          #git push --tags
+
+      - name: Try pushing
+        uses: Homebrew/actions/git-try-push@master
+        with:
+          token: ${{github.token}}
+
+      - uses: actions-ecosystem/action-push-tag@v1
+        with:
+          tag: ${{ steps.build-bottle.outputs.tag-message }}
+          message: ${{ steps.build-bottle.outputs.tag-message }}
 
       - name: Release
         uses: softprops/action-gh-release@v1
         if: success()
         with:
           files: '*.bottle.tar.gz'
+          tag_name: ${{ steps.build-bottle.outputs.tag-message }}
