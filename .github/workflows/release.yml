@@ -79,7 +79,7 @@ jobs:
           branch: main
           tries: 3
 
-      - uses: actions-ecosystem/action-push-tag@v1
+      - name: thejeff77/action-push-tag@v1.0.0
         with:
           tag: ${{ steps.build-bottle.outputs.tag-message }}
           message: ${{ steps.build-bottle.outputs.tag-message }}
