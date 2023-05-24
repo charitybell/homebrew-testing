@@ -40,7 +40,7 @@ jobs:
   build:
     needs: prepare
     runs-on: ubuntu-latest
-    if: ${{ needs.prepare.outputs.matrix.formula != '[]' }}
+    if: ${{ toJSON(fromJSON(needs.prepare.outputs.matrix).formula) != '[]' }}
     strategy:
       matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
     steps:
