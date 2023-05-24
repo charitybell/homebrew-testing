@@ -72,4 +72,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: success()
         with:
-          files: *.bottle.tar.gz
+          files: '*.bottle.tar.gz'
