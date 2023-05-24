@@ -17,6 +17,7 @@ class Hello < Formula
   depends_on "ffmpeg"
 
   def install
+    ENV.append "LDFLAGS", "-liconv" if OS.mac?
     system "./configure"
     system "make"
 
