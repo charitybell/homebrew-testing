@@ -6,7 +6,7 @@ class Hello2 < Formula
   license "AGPL-3.0-only"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "87f572f527592679b82f9280fae94b9c451998da168b0eba1e60dd7065659dba"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "be774eec52b99eca3c6e74d3e754bfef082c65509cccedae2b743e31410c14aa"
   end
 
   depends_on "gcc" => :build
