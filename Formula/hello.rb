@@ -1,5 +1,5 @@
 class Hello < Formula
-  revision 8
+  revision 9
   desc "gnu hello"
   homepage "homepage"
   url "https://ftp.gnu.org/gnu/hello/hello-2.12.tar.gz"
@@ -13,9 +13,9 @@ class Hello < Formula
   depends_on "ffmpeg"
 
   def install
-    ENV.deparallelize
+    system "./configure"
     system "make"
 
-    bin.install "stash"
+    bin.install "hello"
   end
 end
