@@ -32,11 +32,6 @@ jobs:
       run: |
         echo "matrix={\"formula\": ${{ steps.changed-files.outputs.all_changed_files }} }" >> $GITHUB_OUTPUT
 
-  test:
-    needs: prepare
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo '${{ toJSON(fromJSON(needs.prepare.outputs.matrix).formula) }}'
   build:
     needs: prepare
     runs-on: ubuntu-latest
