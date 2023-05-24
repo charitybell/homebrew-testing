@@ -36,7 +36,7 @@ jobs:
     needs: prepare
     runs-on: ubuntu-latest
     steps:
-      - run: echo '${{ needs.prepare.outputs.matrix }}'
+      - run: echo '${{ fromJSON(needs.prepare.outputs.matrix).formula }}'
   build:
     needs: prepare
     runs-on: ubuntu-latest
