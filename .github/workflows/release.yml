@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - 'main'
-      
+
 jobs:
   prepare:
     outputs:
@@ -34,6 +34,7 @@ jobs:
   build:
     needs: prepare
     runs-on: ubuntu-latest
+    if: ${{ needs.prepare.outputs.matrix != '[]' && needs.prepare.outputs.matrix != '' }}
     strategy:
       matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
     steps:
@@ -65,12 +66,8 @@ jobs:
           FORMULA_NAME="$(echo $FORMULA_INFO|cut -d ' ' -f 1)"
           FORMULA_VERSION="$(echo $FORMULA_INFO|cut -d ' ' -f 2)"
           FORMULA_REVISION="$(grep -m 1 revision ${{ matrix.formula }}|awk '{ print $2 }')"
-          TAG_MESSAGE="${FORMULA_NAME}-v${FORMULA_version}-rev${FORMULA_REVISION}"
+          TAG_MESSAGE="${FORMULA_NAME}-v${FORMULA_VERSION}-rev${FORMULA_REVISION}"
           echo "tag-message=$TAG_MESSAGE" >> $GITHUB_OUTPUT
-          #git tag -a "$TAG_MESSAGE" -m "$TAG_MESSAGE"
-          #git remote set-url
-          #git push origin main
-          #git push --tags
 
       - name: Try pushing
         uses: Homebrew/actions/git-try-push@master
