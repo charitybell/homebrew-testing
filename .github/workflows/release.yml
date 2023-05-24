@@ -64,7 +64,8 @@ jobs:
           FORMULA_NAME="$(echo $FORMULA_INFO|cut -d ' ' -f 1)"
           FORMULA_VERSION="$(echo $FORMULA_INFO|cut -d ' ' -f 2)"
           FORMULA_REVISION="$(grep -m 1 revision ${{ matrix.formula }}|awk '{ print $2 }')"
-          git tag -a "${FORMULA_NAME}-v${FORMULA_version}-rev${FORMULA_REVISION}"
+          TAG_MESSAGE="${FORMULA_NAME}-v${FORMULA_version}-rev${FORMULA_REVISION}"
+          git tag -a "$TAG_MESSAGE" -m "$TAG_MESSAGE"
           git push origin main
           git push --tags
 
