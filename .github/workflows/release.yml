@@ -39,6 +39,7 @@ jobs:
       matrix:
         formula: ${{ fromJSON(needs.prepare.outputs.formula) }}
         os: [ubuntu-latest, macos-latest]
+      max-parallel: 1
     runs-on: ${{ matrix.os }}
     steps:
       - name: checkout
