@@ -8,7 +8,7 @@ on:
 jobs:
   prepare:
     outputs:
-      matrix: ${{ steps.set-output-matrix.outputs.formula }}
+      formula: ${{ steps.set-output-matrix.outputs.formula }}
     runs-on: ubuntu-latest
     steps:
     - name: checkout
