@@ -78,7 +78,7 @@ jobs:
             *.bottle.json
 
   release:
-    needs: build
+    needs: [prepare, build]
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -86,12 +86,23 @@ jobs:
         with:
           fetch-depth: 2
 
+      - uses: Homebrew/actions/setup-homebrew@master
+
       - uses: actions/download-artifact@v3
         with:
           name: formula-bottles
 
+      - uses: sergeysova/jq-action@v2
+        id: get-formula
+        with:
+          cmd: 'jq -c ".[]" "${{ fromJSON(needs.prepare.outputs.formula) }}"'
+
       - run: |
-          brew bottle --merge --write *.bottle.json
+          echo ${{ steps.get-formula.outputs.value }} | while read formula; do
+            brew bottle --merge --write "$(basename $formula .rb)"*.bottle.json
+            git tag -a "${{ needs.build.outputs.tag-message }}" -m "${{ needs.build.outputs.tag-message }}"
+          done
+          git push --tags
 
       - name: Try pushing
         uses: Homebrew/actions/git-try-push@master
@@ -99,11 +110,6 @@ jobs:
           token: ${{github.token}}
           branch: main
           tries: 3
-
-      - uses: thejeff77/action-push-tag@v1.0.0
-        with:
-          tag: ${{ needs.build.outputs.tag-message }}
-          message: ${{ needs.build.outputs.tag-message }}
 
       - name: Release
         uses: softprops/action-gh-release@v1
