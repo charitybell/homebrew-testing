@@ -89,10 +89,7 @@ jobs:
 
       - run: echo ${{ needs.prepare.outputs.formula }} > formula.txt
 
-      - uses: sergeysova/jq-action@v2
-        id: get-formula
-        with:
-          cmd: 'jq -c .[] formula.txt'
+      - uses: dcarbone/install-jq-action@v1.0.1
 
       - name: bottle and tag
         run: |
@@ -100,7 +97,7 @@ jobs:
           git remote set-url origin https://${{ github.actor }}:${{ github.token }}@"$(echo ${{ github.repositoryUrl }} | cut -d '/' -f 3-)"
           echo 1
           declare -A tag_array
-          echo ${{ steps.get-formula.outputs.value }} | while read formula; do
+          echo ${{ steps.get-formula.outputs.value }} | jq -c .[] | while read formula; do
             echo 2
             brew bottle --merge --write "$(basename $formula .rb)"*.bottle.json
             brew install ./"$(basename $formula .rb)"*.bottle.*tar.gz
