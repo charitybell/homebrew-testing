@@ -34,7 +34,7 @@ jobs:
         #echo ${{ fromJSON(steps.changed-files.outputs.all_changed_files) }}
         #echo ${{ toJSON(fromJSON(steps.changed-files.outputs.all_changed_files)) }}
         #formula="${{ toJSON(fromJSON(steps.changed-files.outputs.all_changed_files)) }}"
-        echo "formula=$formula" >> $GITHUB_OUTPUT
+        #echo "formula=$formula" >> $GITHUB_OUTPUT
 
   build:
     needs: prepare
