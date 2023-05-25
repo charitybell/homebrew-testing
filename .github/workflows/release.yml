@@ -95,20 +95,26 @@ jobs:
       - name: bottle and tag
         run: |
           # set push url to push tags
-          git remote set-url origin https://${{ github.actor }}:${{ github.token }}/"$(echo ${{ github.repositoryUrl }} | cut -d '/' -f 3-)"
+          git remote set-url origin https://${{ github.actor }}:${{ github.token }}@"$(echo ${{ github.repositoryUrl }} | cut -d '/' -f 3-)"
+          echo 1
           declare -A tag_array
           echo ${{ steps.get-formula.outputs.value }} | while read formula; do
+            echo 2
             brew bottle --merge --write "$(basename $formula .rb)"*.bottle.json
             brew install ./"$(basename $formula .rb)"*.bottle.*tar.gz
+            echo 3
             FORMULA_INFO="$(brew list --versions $FORMULA_NAME)"
             FORMULA_NAME="$(echo $FORMULA_INFO|cut -d ' ' -f 1)"
             FORMULA_VERSION="$(echo $FORMULA_INFO|cut -d ' ' -f 2)"
             TAG_MESSAGE="${FORMULA_NAME}-${FORMULA_VERSION}"
             git tag -a "$TAG_MESSAGE" -m "$TAG_MESSAGE"
+            echo 4
             tag_array["$formula"]="$(git rev-parse HEAD)"
+            echo 5
           done
           git push --tags
           git push
+
           output_json=$(comma=''; echo -n '{' ; for key in "${!tag_array[@]}"; do echo -n $comma '"'"$key"'"':'"'"${tag_array[$key]}"'"'; comma=","; done; echo -n "}")
           echo "tag-array=$output_json" >> $GITHUB_OUTPUT
 
