@@ -1,5 +1,5 @@
 class Hello < Formula
-  revision 55
+  revision 56
   desc "gnu hello"
   homepage "homepage"
   url "https://ftp.gnu.org/gnu/hello/hello-2.12.tar.gz"

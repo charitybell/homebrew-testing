@@ -96,9 +96,9 @@ jobs:
           # set push url to push tags
           git remote set-url origin https://${{ github.actor }}:${{ github.token }}@"$(echo ${{ github.repositoryUrl }} | cut -d '/' -f 3-)"
           echo 1
-          echo ${{ needs.prepare.outputs.formula }}
+          echo '${{ needs.prepare.outputs.formula }}'
           declare -A tag_array
-          echo ${{ needs.prepare.outputs.formula }} | jq -c .[] | while read formula; do
+          echo '${{ needs.prepare.outputs.formula }}' | jq -c .[] | while read formula; do
             echo 2
             brew bottle --merge --write "$(basename $formula .rb)"*.bottle.json
             brew install ./"$(basename $formula .rb)"*.bottle.*tar.gz
