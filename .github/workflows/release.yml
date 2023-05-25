@@ -90,7 +90,7 @@ jobs:
       - uses: sergeysova/jq-action@v2
         id: get-formula
         with:
-          cmd: 'echo "${{ needs.prepare.outputs.formula }} | "jq -c ".[]"'
+          cmd: 'echo ${{ needs.prepare.outputs.formula }} | jq -c .[]'
 
       - name: bottle and tag
         run: |
