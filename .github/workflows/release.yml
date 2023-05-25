@@ -95,7 +95,7 @@ jobs:
       - uses: sergeysova/jq-action@v2
         id: get-formula
         with:
-          cmd: 'jq -c ".[]" "${{ fromJSON(needs.prepare.outputs.formula) }}"'
+          cmd: 'jq -c ".[]" "${{ needs.prepare.outputs.formula }}"'
 
       - run: |
           echo ${{ steps.get-formula.outputs.value }} | while read formula; do
