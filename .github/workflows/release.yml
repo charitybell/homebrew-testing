@@ -30,7 +30,7 @@ jobs:
     - name: set output matrix
       id: set-output-matrix
       run: |
-        echo ${{ steps.changed-files.outputs.all_changed_files }}
+        echo ${{ steps.changed-files.outputs }}
         #echo ${{ fromJSON(steps.changed-files.outputs.all_changed_files) }}
         #echo ${{ toJSON(fromJSON(steps.changed-files.outputs.all_changed_files)) }}
         #formula="${{ toJSON(fromJSON(steps.changed-files.outputs.all_changed_files)) }}"
