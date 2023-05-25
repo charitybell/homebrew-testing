@@ -31,7 +31,7 @@ jobs:
       id: set-output-matrix
       run: |
         echo ${{ steps.changed-files.outputs.all_changed_files }}
-        echo ${{ fromJSON(steps.changed-files.outputs.all_changed_files) }}
+        echo ${{ toJSON(fromJSON(steps.changed-files.outputs.all_changed_files)) }}
         #echo "formula=${{ toJSON(fromJSON(steps.changed-files.outputs.all_changed_files)) }}" >> $GITHUB_OUTPUT
 
   build:
