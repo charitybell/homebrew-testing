@@ -110,7 +110,7 @@ jobs:
           git push --tags
           git push
           output_json=$(comma=''; echo -n '{' ; for key in "${!tag_array[@]}"; do echo -n $comma '"'"$key"'"':'"'"${tag_array[$key]}"'"'; comma=","; done; echo -n "}")
-         echo "tag-array=$output_json" >> $GITHUB_OUTPUT
+          echo "tag-array=$output_json" >> $GITHUB_OUTPUT
 
       #- name: Try pushing
       #  uses: Homebrew/actions/git-try-push@master
