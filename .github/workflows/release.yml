@@ -29,8 +29,8 @@ jobs:
 
     - name: set output matrix
       id: set-output-matrix
+      # toJSON(fromJSON()) is needed to add quotes to list values
       run: |
-        # toJSON(fromJSON()) is needed to add quotes to list values
         echo "formula=${{ toJSON(fromJSON(steps.changed-files.outputs.all_changed_files)) }}" >> $GITHUB_OUTPUT
 
   build:
