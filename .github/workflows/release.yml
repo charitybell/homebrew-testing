@@ -26,6 +26,7 @@ jobs:
       with:
         files: Formula/*.rb
         json: true
+        json_raw_format: true
 
     - name: set output matrix
       id: set-output-matrix
