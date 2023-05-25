@@ -87,10 +87,12 @@ jobs:
         with:
           name: formula-bottles
 
+      - run: echo ${{ needs.prepare.outputs.formula }} > formula.txt
+
       - uses: sergeysova/jq-action@v2
         id: get-formula
         with:
-          cmd: 'echo ${{ needs.prepare.outputs.formula }} | jq -c .[]'
+          cmd: 'jq -c .[] formula.txt'
 
       - name: bottle and tag
         run: |
