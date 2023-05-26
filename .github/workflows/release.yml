@@ -103,7 +103,7 @@ jobs:
             echo 1
             FORMULA_TAP=$(echo ${{ github.repository }} | cut -d / -f 1)/$(echo ${{ github.repository }} | cut -d / -f 2 | cut -d - -f 2)/$FORMULA_NAME
             echo 2
-            FORMULA_VERSION=$(jq .['"'$FORMULA_TAP'"'].formula.pkg_version ${FORMULA_NAME}*.bottle.json)
+            FORMULA_VERSION=$(jq -r .['"'$FORMULA_TAP'"'].formula.pkg_version ${FORMULA_NAME}*.bottle.json)
             echo 3
             TAG_MESSAGE="${FORMULA_NAME}-${FORMULA_VERSION}"
             git tag -a "$TAG_MESSAGE" -m "$TAG_MESSAGE"
