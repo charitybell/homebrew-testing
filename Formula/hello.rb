@@ -7,7 +7,8 @@ class Hello < Formula
   license "AGPL-3.0-only"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "fd49ad092f94e80e43aba0fdc3930eec64fdf89c97cf85bf4b9f1873e4fef90a"
+    sha256 cellar: :any,                 monterey:     "fb463d0a0e6547f7f7c962fc1776efe112b3a1aa4ca0a80bd9b7370fc880a51b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "37daf579fdc38eaa9074743498d8fe92f86ec7181740cce846f3ae6cd48d4caa"
   end
 
   depends_on "gcc" => :build
