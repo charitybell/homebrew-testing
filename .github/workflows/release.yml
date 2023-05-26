@@ -131,7 +131,7 @@ jobs:
 
       - id: get-bottle-names
         run: |
-          ls "$(echo $(basename ${{ matrix.formula }} .rb)'*bottle.*tar.gz')"
+          ls "$(echo $(basename ${{ matrix.formula }} .rb)*bottle.*tar.gz)"
           echo "value=$(echo $(basename ${{ matrix.formula }} .rb)'*bottle.*tar.gz')" >> $GITHUB_OUTPUT
 
       - id: get-tag-name
