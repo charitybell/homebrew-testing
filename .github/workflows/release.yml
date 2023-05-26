@@ -112,8 +112,8 @@ jobs:
             tag_array["$formula"]="$(git rev-parse HEAD)"
             echo 5
           done
-          git push --tags
-          git push
+          git -c push.default=simple push --tags
+          git -c push.default=simple push
 
           output_json=$(comma=''; echo -n '{' ; for key in "${!tag_array[@]}"; do echo -n $comma '"'"$key"'"':'"'"${tag_array[$key]}"'"'; comma=","; done; echo -n "}")
           echo "tag-array=$output_json" >> $GITHUB_OUTPUT
