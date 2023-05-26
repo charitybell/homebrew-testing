@@ -131,7 +131,6 @@ jobs:
 
       - id: get-bottle-names
         run: |
-          ls "$(echo $(basename ${{ matrix.formula }} .rb)*bottle.*tar.gz)"
           echo "value=$(echo $(basename ${{ matrix.formula }} .rb)'*bottle.*tar.gz')" >> $GITHUB_OUTPUT
 
       - id: get-tag-name
@@ -142,8 +141,7 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v1
-        env:
-          INPUT_TAG_NAME: '${{ steps.get-tag-name.outputs.tag-name }}'
         with:
-          files: '${{ steps.get-bottle-names.outputs.value }}'
           tag_name: '${{ steps.get-tag-name.outputs.tag-name }}'
+          files: |
+            ${{ steps.get-bottle-names.outputs.value }}
