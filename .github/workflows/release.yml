@@ -87,7 +87,7 @@ jobs:
         with:
           name: formula-bottles
 
-      - run: echo ${{ needs.prepare.outputs.formula }} > formula.txt
+      - uses: fregante/setup-git-user@v2
 
       - uses: dcarbone/install-jq-action@v1.0.1
 
