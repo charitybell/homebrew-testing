@@ -98,8 +98,9 @@ jobs:
           echo 1
           echo '${{ needs.prepare.outputs.formula }}'
           declare -A tag_array
-          echo '${{ needs.prepare.outputs.formula }}' | jq -c .[] | while read formula; do
+          echo '${{ needs.prepare.outputs.formula }}' | jq -rc .[] | while read formula; do
             echo 2
+            echo $formula
             brew bottle --merge --write "$(basename $formula .rb)"*.bottle.json
             brew install ./"$(basename $formula .rb)"*.bottle.*tar.gz
             echo 3
