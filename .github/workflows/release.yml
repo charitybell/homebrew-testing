@@ -28,7 +28,7 @@ jobs:
     - id: set-output-matrix
       run: |
         if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-          echo formula=$(ls | jq -cRrs 'split("\n")[:-1]') >> $GITHUB_OUTPUT
+          echo formula=$(ls Formula| jq -cRrs 'split("\n")[:-1]') >> $GITHUB_OUTPUT
         else
           echo 'formula=${{ steps.changed-files.outputs.all_changed_files }}' >> $GITHUB_OUTPUT
         fi
