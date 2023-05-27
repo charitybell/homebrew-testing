@@ -55,8 +55,8 @@ jobs:
         id: build-bottle
         run: |
           FORMULA_NAME="${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)"
-          mkdir -p $(dirname ${{ github.repository }})
-          ln -sT $(pwd) $(brew --prefix)/${{ github.repository }}
+          mkdir -p $(brew --prefix)/Library/Taps/$(dirname ${{ github.repository }})
+          ln -sT $(pwd) $(brew --prefix)/Library/Taps/${{ github.repository }}
           brew install --build-bottle "$FORMULA_NAME"
           brew bottle --force-core-tap --no-rebuild --json "$FORMULA_NAME"
 
