@@ -1,6 +1,7 @@
 name: build and release
 
 on:
+  workflow_dispatch: []
   push:
     branches:
       - 'main'
@@ -25,7 +26,12 @@ jobs:
         json_raw_format: true
 
     - id: set-output-matrix
-      run: echo 'formula=${{ steps.changed-files.outputs.all_changed_files }}' >> $GITHUB_OUTPUT
+      run: |
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          echo formula=$(ls | jq -cRrs 'split("\n")[:-1]') >> $GITHUB_OUTPUT
+        else
+          echo 'formula=${{ steps.changed-files.outputs.all_changed_files }}' >> $GITHUB_OUTPUT
+        fi
 
   build:
     needs: prepare
