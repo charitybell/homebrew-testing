@@ -6,6 +6,13 @@ class Stash < Formula
   license "AGPL-3.0-only"
   head "https://github.com/stashapp/stash.git", branch: "develop"
 
+  bottle do
+    sha256 cellar: :any_skip_relocation, ventura:      "5e31dc24ebca94c767303fa82410a83f0236c95778ae87e01a49f57a18a2e7ae"
+    sha256 cellar: :any_skip_relocation, monterey:     "75d1343c87a255e8c4f163ff5786a425e9c1942aecb12f0a3bd8bb4c77a1b349"
+    sha256 cellar: :any_skip_relocation, big_sur:      "14b8dbadeedf6e42c72f44437371e77add40c92f1b681262352b7d0be19408b8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "aec3ced5d94cd21291f8e622555f042eedc42ce82808600d8965f7909f79d09a"
+  end
+
   depends_on "gcc" => :build
   depends_on "go" => :build
   depends_on "node" => :build
