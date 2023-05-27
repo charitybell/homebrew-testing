@@ -50,9 +50,9 @@ jobs:
       - name: build bottle (${{ matrix.formula }})
         id: build-bottle
         run: |
-          FORMULA_NAME="${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)"
-          brew install --build-bottle "$FORMULA_NAME"
-          brew bottle --force-core-tap --no-rebuild --json "$FORMULA_NAME"
+          FORMULA_NAME="$(basename ${{ matrix.formula }} .rb)"
+          brew install --build-bottle "./$FORMULA_NAME"
+          brew bottle --force-core-tap --no-rebuild --json "./$FORMULA_NAME"
 
       - uses: actions/upload-artifact@v3
         with:
