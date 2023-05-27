@@ -41,7 +41,7 @@ jobs:
     strategy:
       matrix:
         formula: ${{ fromJSON(needs.prepare.outputs.formula) }}
-        os: ${{ vars.TARGET_SYSTEMS }}
+        os: ${{ fromJSON(vars.TARGET_SYSTEMS) }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: checkout
