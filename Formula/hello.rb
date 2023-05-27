@@ -7,10 +7,10 @@ class Hello < Formula
   license "AGPL-3.0-only"
 
   bottle do
-    sha256 cellar: :any,                 ventura:      "3d89c31821b20c95f957a71435be78717b0a533def1fe5324ab0de62384de60d"
-    sha256 cellar: :any,                 monterey:     "4427f096eda2015fab06423810b136c5bc1ac489a2e5f2ae050113c2d7c2fffb"
-    sha256 cellar: :any,                 big_sur:      "a4a807d7bc3e63710cabbaba39c3b8cb91a075cec963382caa9f0754d130ad00"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "d6833b9dd9d75e591d4defc05cfc97fe7f58cd2e6b1c609ee6d3a147e9673536"
+    sha256 cellar: :any,                 ventura:      "0a392391f9eb84b1a638aa6a59b9c75b5c3d461047a88d0a6c09fdf83a5b932a"
+    sha256 cellar: :any,                 monterey:     "50243d316061caabac28c26fdbb6091f599a98848ac495d0c3e13d9e31028cb0"
+    sha256 cellar: :any,                 big_sur:      "09a57aeca71c751f8e926c0b61731063ea614a168e3564588edebf5d3989260e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "4e8ff2f2f5d949e0fa4d470b64bd543126ac44b640e4c08475ff764c44269a48"
   end
 
   depends_on "gcc" => :build unless OS.mac?
