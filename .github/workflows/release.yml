@@ -5,6 +5,9 @@ on:
     branches:
       - 'main'
 
+env:
+  HOMEBREW_INSTALL_FROM_API: 1
+
 jobs:
   prepare:
     outputs:
