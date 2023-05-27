@@ -54,6 +54,7 @@ jobs:
       - name: build bottle (${{ matrix.formula }})
         id: build-bottle
         run: |
+          ls $(brew --repo)/Library/Taps/${{ github.repository }}/Formula
           FORMULA_NAME="${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)"
           mkdir -p $(brew --repo)/Library/Taps/$(dirname ${{ github.repository }})
           ln -sT $(pwd) $(brew --repo)/Library/Taps/${{ github.repository }}
