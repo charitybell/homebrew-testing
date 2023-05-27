@@ -53,6 +53,8 @@ jobs:
       - name: build bottle (${{ matrix.formula }})
         id: build-bottle
         run: |
+          #FORMULA_NAME="$(basename ${{ matrix.formula }} .rb)"
+          git -C $(brew --repo homebrew/core) checkout master
           brew install --build-bottle "${{ matrix.formula }}"
           brew bottle --force-core-tap --no-rebuild --json "${{ matrix.formula }}"
 
