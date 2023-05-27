@@ -42,7 +42,6 @@ jobs:
       matrix:
         formula: ${{ fromJSON(needs.prepare.outputs.formula) }}
         os: [ubuntu-latest, macos-latest]
-      #max-parallel: 1
     runs-on: ${{ matrix.os }}
     steps:
       - name: checkout
@@ -103,9 +102,9 @@ jobs:
           declare -A tag_array
           for formula in $(echo '${{ needs.prepare.outputs.formula }}' | jq -rc .[]); do
             FORMULA_NAME="$(basename $formula .rb)"
-            brew bottle --merge --write ${FORMULA_NAME}*.bottle.json
+            brew bottle --merge --write ${FORMULA_NAME}-*.bottle.json
             FORMULA_TAP=$(echo ${{ github.repository }} | cut -d / -f 1)/$(echo ${{ github.repository }} | cut -d / -f 2 | cut -d - -f 2)/$FORMULA_NAME
-            FORMULA_VERSION=$(jq -cr .['"'$FORMULA_TAP'"'].formula.pkg_version ${FORMULA_NAME}*.bottle.json | head -n 1)
+            FORMULA_VERSION=$(jq -cr .['"'$FORMULA_TAP'"'].formula.pkg_version ${FORMULA_NAME}-*.bottle.json | head -n 1)
             TAG_MESSAGE="${FORMULA_NAME}-${FORMULA_VERSION}"
             git tag -a "$TAG_MESSAGE" -m "$TAG_MESSAGE"
             tag_array["$formula"]="$TAG_MESSAGE"
@@ -131,7 +130,7 @@ jobs:
 
       - id: get-bottle-names
         run: |
-          echo "value=$(echo $(basename ${{ matrix.formula }} .rb)'*bottle.*tar.gz')" >> $GITHUB_OUTPUT
+          echo "value=$(echo $(basename ${{ matrix.formula }} .rb)'-*bottle.*tar.gz')" >> $GITHUB_OUTPUT
 
       - id: get-tag-name
         run: |
