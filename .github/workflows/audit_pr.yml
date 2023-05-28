@@ -32,6 +32,10 @@ jobs:
 
       - uses: Homebrew/actions/setup-homebrew@master
 
-      - name: audit bottle (${{ matrix.formula }})
+      - name: Audit bottle (${{ matrix.formula }})
         run: |
           brew audit --online ${{ matrix.formula }}
+
+      - name: Install bottle (${{ matrix.formula }})
+        run: |
+          brew install --build-from-source ${{ github.repository }}/$(basename ${{ matrix.formula }} .rb )
