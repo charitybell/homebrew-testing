@@ -12,6 +12,13 @@ class Gbdk2020 < Formula
   ]
   head "https://github.com/gbdk-2020/gbdk-2020.git", branch: "develop"
 
+  bottle do
+    sha256 cellar: :any,                 ventura:      "653b51ccb71115180058894336b89fdbd49eba99a62aa567d568360dd3d1526b"
+    sha256 cellar: :any,                 monterey:     "4631a775e9431e8189dbfc4d5844d7c4005ac6f2d83033853a393678ca3b7cfc"
+    sha256 cellar: :any,                 big_sur:      "1d81027ba88b49f27a88d38ea4e5e83aa004d7638ee23ce98edd7679276d0e32"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "ccb15560bc4f215a48bd69d5dc16140d86173d3d14a3b4a15f95e3b761384820"
+  end
+
   depends_on "doxygen" => :build
   depends_on "gcc" => :build
   depends_on "gputils" => :build
