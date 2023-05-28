@@ -2,7 +2,7 @@ name: Audit PR
 
 on: [pull_request]
 
-jobs:  
+jobs:
   prepare:
     outputs:
       formula: ${{ steps.set-output-matrix.outputs.formula }}
@@ -17,25 +17,43 @@ jobs:
         with:
           files: Formula/*.rb
           json: true
-          
+
       - id: set-output-matrix
         run: |
           echo "formula=${{ steps.changed-files.outputs.all_changed_files }}" >> $GITHUB_OUTPUT
   audit:
     needs: prepare
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         formula: ${{ fromJSON(needs.prepare.outputs.formula) }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
       - uses: Homebrew/actions/setup-homebrew@master
 
-      - name: Audit bottle (${{ matrix.formula }})
+      - name: Audit formula (${{ matrix.formula }})
         run: |
-          brew audit --online ${{ matrix.formula }}
+          brew audit --except license --os all --arch all --strict --online --git \
+            ${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)
 
-      - name: Install bottle (${{ matrix.formula }})
+      - name: Audit formula license (${{ matrix.formula }})
         run: |
-          brew install --build-from-source ${{ github.repository }}/$(basename ${{ matrix.formula }} .rb )
+          brew audit --only license --os all --arch all --strict --online --git \
+            ${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)
+
+  install:
+    needs: prepare
+    if: '!cancelled()'
+    strategy:
+      matrix:
+        formula: ${{ fromJSON(needs.prepare.outputs.formula) }}
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ strategy.matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Install formula (${{ matrix.formula }})
+        run: brew install --build-from-source ${{ github.repository }}/$(basename ${{ matrix.formula }} .rb )
