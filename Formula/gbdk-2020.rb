@@ -19,12 +19,12 @@ class Gbdk2020 < Formula
     sha256 cellar: :any_skip_relocation, x86_64_linux: "ccb15560bc4f215a48bd69d5dc16140d86173d3d14a3b4a15f95e3b761384820"
   end
 
+  keg_only "shadows system headers"
+
   depends_on "doxygen" => :build
   depends_on "gcc" => :build
   depends_on "gputils" => :build
   depends_on "texinfo" => :build
-
-  keg_only "shadows system headers"
 
   fails_with :clang do
     build 1403
