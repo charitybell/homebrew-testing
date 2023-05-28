@@ -51,7 +51,7 @@ jobs:
       matrix:
         formula: ${{ fromJSON(needs.prepare.outputs.formula) }}
         os: [ubuntu-latest, macos-latest]
-    runs-on: ${{ strategy.matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
 
