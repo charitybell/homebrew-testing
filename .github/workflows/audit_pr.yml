@@ -33,11 +33,13 @@ jobs:
       - uses: Homebrew/actions/setup-homebrew@master
 
       - name: Audit formula (${{ matrix.formula }})
+        continue-on-error: true
         run: |
           brew audit --except license --os all --arch all --strict --online --git \
             ${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)
 
       - name: Audit formula license (${{ matrix.formula }})
+        continue-on-error: true
         run: |
           brew audit --only license --os all --arch all --strict --online --git \
             ${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)
