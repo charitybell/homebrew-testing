@@ -51,7 +51,9 @@ jobs:
         run: |
           FORMULA_NAME="${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)"
           brew install --build-bottle "$FORMULA_NAME"
-          brew bottle --force-core-tap --no-rebuild --json "$FORMULA_NAME"
+          brew bottle --force-core-tap --no-rebuild --json \
+            --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMULA_NAME/$FORMULA_VERSION \
+            "$FORMULA_NAME"
 
       - uses: actions/upload-artifact@v3
         with:
@@ -96,7 +98,7 @@ jobs:
 
             brew bottle --merge \
               --write \
-              --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMUL_NAME/$FORMULA_VERSION \
+              --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMULA_NAME/$FORMULA_VERSION \
               ${FORMULA_NAME}-*.bottle.json
 
             git tag -a "$TAG_MESSAGE" -m "$TAG_MESSAGE"
