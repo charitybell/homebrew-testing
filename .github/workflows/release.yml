@@ -78,6 +78,18 @@ jobs:
     if: ${{ needs.prepare.outputs.formula != '[]' }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - uses: Homebrew/actions/git-user-config@master
+
+      - uses: Homebrew/actions/setup-homebrew@master
+
+      - uses: charitybell/set-git-url-action@main
+        with:
+          token: ${{ github.token }}
+
       - uses: dcarbone/install-jq-action@v1.0.1
 
       - uses: actions/download-artifact@v3
