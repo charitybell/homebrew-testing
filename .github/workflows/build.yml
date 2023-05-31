@@ -1,0 +1,21 @@
+on:
+  workflow-call:
+    inputs:
+      formula:
+        required: true
+        description: Name of formula to build, without "<user>/<repo>/" prefix
+        type: string
+      os:
+        required: true
+        type: choice
+        description: What operating system to build on
+        options: ${{ fromJSON(vars.RUNNERS) }}
+jobs:
+  build:
+    runs-on: ${{ github.event.inputs.os }}
+    steps:
+      - run: echo ${{ github.event.inputs.formula }} >> ${{ github.event.inputs.formula }}.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: formula-bottles
+          path: ${{ github.event.inputs.formula }}.txt
