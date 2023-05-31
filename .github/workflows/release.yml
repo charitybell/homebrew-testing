@@ -102,7 +102,7 @@ jobs:
         id: bottle-and-tag
         run: |
           TAG_ARRAY={}
-          for formula in $(echo '${{ inputs.formula }}' | jq -rc .[]); do
+          for formula in $(echo '${{ needs.prepare.outputs.formula }}' | jq -rc .[]); do
             FORMULA_NAME="$(basename $formula .rb)"
             FORMULA_TAP=$(echo ${{ github.repository }} | cut -d / -f 1)/$(echo ${{ github.repository }} | cut -d / -f 2 | cut -d - -f 2)/$FORMULA_NAME
             FORMULA_VERSION=$(jq -cr .['"'$FORMULA_TAP'"'].formula.pkg_version ${FORMULA_NAME}-*.bottle.json | head -n 1)
