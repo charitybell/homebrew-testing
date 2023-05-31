@@ -9,8 +9,8 @@ on:
         required: true
         type: string
         description: What operating system to build on
+runs-on: ubuntu-latest
 jobs:
-  runs-on: ubuntu-latest
   prepare:
     steps:
       - uses: actions/checkout@v3
