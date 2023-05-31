@@ -1,0 +1,52 @@
+on:
+  workflow-call:
+    inputs:
+      formula:
+        required: true
+        description: Name of formula to build, without "<user>/<repo>/" prefix
+        type: string
+      os:
+        required: true
+        type: string
+        description: What operating system to build on
+    outputs:
+      tag-message:
+        value: ${{ jobs.build.outputs.tag-message }}
+
+jobs:
+  build:
+    runs-on: ${{ inputs.os }}
+    outputs:
+      tag-message: ${{ steps.build-bottle.outputs.tag-message }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - uses: Homebrew/actions/git-user-config@master
+
+      - uses: Homebrew/actions/setup-homebrew@master
+
+      - uses: charitybell/set-git-url-action@main
+        with:
+          token: ${{ github.token }}
+
+      - name: build bottle (${{ inputs.formula }})
+        id: build-bottle
+        run: |
+          FORMULA_NAME="${{ github.repository }}/$(basename ${{ inputs.formula }} .rb)"
+          brew install --build-bottle "$FORMULA_NAME"
+          brew bottle --force-core-tap --no-rebuild --json \
+            --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMULA_NAME/$FORMULA_VERSION \
+            "$FORMULA_NAME"
+          BASE_FILENAME=$(basename $(jq -r '.[].bottle.tags|.[].filename' $FORMULA_NAME-*bottle.*json) .tar.gz)
+          BASE_LOCAL_FILENAME=$(basename $(jq -r '.[].bottle.tags|.[].filename' $FORMULA_NAME-*bottle.*json) .tar.gz)
+          mv $BASE_LOCAL_FILENAME.json $BASE_FILENAME.json
+          mv $BASE_LOCAL_FILENAME.tar.gz $BASE_FILENAME.tar.gz
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: formula-bottles
+          path: |
+            *.bottle.tar.gz
+            *.bottle.json

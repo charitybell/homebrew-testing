@@ -1,0 +1,79 @@
+name: Audit PR
+
+on: [pull_request]
+
+jobs:
+  prepare:
+    outputs:
+      casks: ${{ steps.set-output-matrix.outputs.casks }}
+      formula: ${{ steps.set-output-matrix.outputs.formula }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - id: changed-files
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            Casks/*.rb
+            Formula/*.rb
+          json: true
+
+      - id: set-output-matrix
+        run: |
+          echo casks=$(echo ${{ steps.changed-files.outputs.all_changed_files }} | jq -rc '[.[] | select(. | startswith("Casks"))]') >> $GITHUB_OUTPUT
+          echo formula=$(echo ${{ steps.changed-files.outputs.all_changed_files }} | jq -rc '[.[] | select(. | startswith("Formula"))]') >> $GITHUB_OUTPUT
+
+  audit-casks:
+    needs: prepare
+    if: ${{ needs.prepare.outputs.casks != '[]' }}
+    strategy:
+      matrix:
+        cask: ${{ fromJSON(needs.prepare.outputs.casks) }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Audit cask (${{ matrix.cask }})
+        continue-on-error: true
+        run: |
+          brew audit --os all --arch all --strict --online --git \
+            ${{ github.repository }}/$(basename ${{ matrix.cask }} .rb)
+
+  audit:
+    needs: prepare
+    if: ${{ needs.prepare.outputs.formula != '[]' }}
+    strategy:
+      matrix:
+        formula: ${{ fromJSON(needs.prepare.outputs.formula) }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Audit formula (${{ matrix.formula }})
+        continue-on-error: true
+        run: |
+          brew audit --os all --arch all --strict --online --git \
+            ${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)
+
+  install:
+    needs: prepare
+    if: '!cancelled()'
+    strategy:
+      matrix:
+        formula: ${{ fromJSON(needs.prepare.outputs.formula) }}
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Install formula (${{ matrix.formula }})
+        run: brew install --build-from-source ${{ github.repository }}/$(basename ${{ matrix.formula }} .rb )

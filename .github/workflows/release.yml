@@ -1,0 +1,110 @@
+name: Build and release
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  prepare:
+    outputs:
+      casks: ${{ steps.set-output-matrix.outputs.casks }}
+      formula: ${{ steps.set-output-matrix.outputs.formula }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - uses: Homebrew/actions/setup-homebrew@master
+
+    - id: changed-files
+      uses: tj-actions/changed-files@v35
+      with:
+        files: |
+          Casks/*.rb
+          Formula/*.rb
+        json: true
+        json_raw_format: true
+
+    - id: set-output-matrix
+      run: |
+        echo casks=$(echo '${{ steps.changed-files.outputs.all_changed_files }}' | jq -rc '[.[] | select(. | startswith("Casks"))]') >> $GITHUB_OUTPUT
+        echo formula=$(echo '${{ steps.changed-files.outputs.all_changed_files }}' | jq -rc '[.[] | select(. | startswith("Formula"))]') >> $GITHUB_OUTPUT
+
+  tag-casks:
+    needs: prepare
+    if: ${{ needs.prepare.outputs.casks != '[]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - uses: Homebrew/actions/git-user-config@master
+
+      - uses: Homebrew/actions/setup-homebrew@master
+
+      - uses: charitybell/set-git-url-action@main
+        with:
+          token: ${{ github.token }}
+
+      - name: tag casks
+        run: |
+          for cask in $(echo '${{ needs.prepare.outputs.casks }}' | jq -rc .[]); do
+            FORMULA_NAME="$(basename $cask .rb)"
+            FORMULA_VERSION=$(grep "version " "$cask" | head -n 1 | awk '{ print $2 }' | cut -d '"' -f 2)
+            TAG_MESSAGE="${FORMULA_NAME}-${FORMULA_VERSION}"
+
+            git tag -a "$TAG_MESSAGE" -m "$TAG_MESSAGE"
+          done
+          git -c push.default=current push --tags
+          git -c push.default=current push
+
+  build:
+    needs: prepare
+    if: ${{ needs.prepare.outputs.formula != '[]' }}
+    strategy:
+      matrix:
+        formula: ${{ fromJSON(needs.prepare.outputs.formula) }}
+        os: ${{ fromJSON(vars.RUNNERS) }}
+    uses: ./.github/workflows/build_formula.yml
+    with:
+      formula: ${{ matrix.formula }}
+      os: ${{ matrix.os }}
+
+  tag:
+    needs: [prepare, build]
+    uses: ./.github/workflows/bottle_tag.yml
+    with:
+      formula: ${{ needs.prepare.outputs.formula }}
+
+  release:
+    needs: [prepare, build, tag]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        formula: ${{ fromJSON(needs.prepare.outputs.formula) }}
+    steps:
+      - uses: dcarbone/install-jq-action@v1.0.1
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: formula-bottles
+
+      - id: get-bottle-names
+        run: echo "value=$(echo $(basename ${{ matrix.formula }} .rb)'-*bottle.*tar.gz')" >> $GITHUB_OUTPUT
+
+      - id: get-tag-name
+        run: |
+          TAG_NAME=$(echo '${{ needs.tag.outputs.tag-array }}' | jq -rc .['"'${{ matrix.formula }}'"'])
+          echo $TAG_NAME
+          echo "tag-name=$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Release (${{ matrix.formula }})
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: '${{ steps.get-tag-name.outputs.tag-name }}'
+          # the multiline string is needed, otherwise the `*` globs break yaml syntax
+          files: |
+            ${{ steps.get-bottle-names.outputs.value }}
