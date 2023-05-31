@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: ${{ inputs.os }}
     outputs:
-      tag-message: ${{ steps.build-bottle.outputs.tag-message }}
+      tag-array: ${{ steps.build-bottle.outputs.tag-message }}
     steps:
       - uses: actions/checkout@v3
         with:
