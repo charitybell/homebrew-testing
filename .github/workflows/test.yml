@@ -5,10 +5,6 @@ on:
         required: true
         description: Name of formula to build, without "<user>/<repo>/" prefix
         type: string
-      os:
-        required: true
-        type: string
-        description: What operating system to build on
 jobs:
   prepare:
     runs-on: ubuntu-latest
@@ -19,10 +15,13 @@ jobs:
 
   call:
     needs: [prepare]
+    strategy:
+      matrix:
+        os: ${{ fromJSON(vars.RUNNERS) }}
     uses: ./.github/workflows/build.yml
     with:
       formula: ${{ github.event.inputs.formula }}
-      os: ${{ github.event.inputs.os }}
+      os: ${{ matrix.os }}
 
   check:
     needs: [call]
