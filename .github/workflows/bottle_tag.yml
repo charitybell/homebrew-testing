@@ -35,6 +35,7 @@ jobs:
       - name: bottle and tag
         id: bottle-and-tag
         run: |
+          brew update
           declare -A tag_array
           for formula in $(echo '${{ inputs.formula }}' | jq -rc .[]); do
             FORMULA_NAME="$(basename $formula .rb)"
