@@ -10,8 +10,8 @@ on:
         type: string
         description: What operating system to build on
 jobs:
+  runs-on: ubuntu-latest
   prepare:
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
