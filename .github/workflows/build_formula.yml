@@ -39,9 +39,10 @@ jobs:
           brew bottle --force-core-tap --json \
             --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMULA_NAME/$FORMULA_VERSION \
             "$FORMULA_NAME"
-          ls
-          BASE_FILENAME=$(basename $(jq -r '.[].bottle.tags|.[].filename' $FORMULA_NAME-*bottle.*json) .tar.gz)
-          BASE_LOCAL_FILENAME=$(basename $(jq -r '.[].bottle.tags|.[].filename' $FORMULA_NAME-*bottle.*json) .tar.gz)
+          BASE_FILENAME=$(basename $(jq -r '.[].bottle.tags|.[].filename' $(basename $FORMULA_NAME)-*bottle.*json) .tar.gz)
+          BASE_LOCAL_FILENAME=$(basename $(jq -r '.[].bottle.tags|.[].filename' $(basename $FORMULA_NAME)-*bottle.*json) .tar.gz)
+          echo $BASE_FILENAME
+          echo $BASE_LOCAL_FILENAME
           mv $BASE_LOCAL_FILENAME.json $BASE_FILENAME.json
           mv $BASE_LOCAL_FILENAME.tar.gz $BASE_FILENAME.tar.gz
 
