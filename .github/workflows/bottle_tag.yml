@@ -43,6 +43,11 @@ jobs:
             FORMULA_VERSION=$(jq -cr .['"'$FORMULA_TAP'"'].formula.pkg_version ${FORMULA_NAME}-*.bottle.json | head -n 1)
             TAG_MESSAGE="${FORMULA_NAME}-${FORMULA_VERSION}"
 
+            ls
+            echo brew bottle --merge --write \
+              --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMULA_NAME/$FORMULA_VERSION \
+              ${FORMULA_NAME}-*.bottle.*json
+
             brew bottle --merge --write \
               --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMULA_NAME/$FORMULA_VERSION \
               ${FORMULA_NAME}-*.bottle.*json
