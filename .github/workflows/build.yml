@@ -11,13 +11,13 @@ on:
         description: What operating system to build on
 jobs:
   build:
-    runs-on: ${{ github.event.inputs.os }}
+    runs-on: ${{ inputs.os }}
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - run: echo ${{ github.event.inputs.formula }} >> ${{ github.event.inputs.formula }}.txt
+      - run: echo ${{ inputs.formula }} >> ${{ inputs.formula }}.txt
       - uses: actions/upload-artifact@v3
         with:
           name: formula-bottles
-          path: ${{ github.event.inputs.formula }}.txt
+          path: ${{ inputs.formula }}.txt
