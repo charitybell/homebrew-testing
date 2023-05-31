@@ -17,6 +17,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - run: |
+          ls -la
+          ls -la .github
+          ls -la .github/workflows
+
       - uses: ./.github/workflows/build.yml
         with:
           formula: ${{ github.event.inputs.formula }}
