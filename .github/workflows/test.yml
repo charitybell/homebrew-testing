@@ -19,9 +19,9 @@ jobs:
 
   call:
     uses: ./.github/workflows/build.yml
-      with:
-        formula: ${{ github.event.inputs.formula }}
-        os: ${{ github.event.inputs.os }}
+    with:
+      formula: ${{ github.event.inputs.formula }}
+      os: ${{ github.event.inputs.os }}
 
   check:
     runs-on: ubuntu-latest
