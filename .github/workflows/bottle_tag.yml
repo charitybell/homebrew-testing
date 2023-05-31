@@ -45,7 +45,7 @@ jobs:
 
             brew bottle --merge --write \
               --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMULA_NAME/$FORMULA_VERSION \
-              ${FORMULA_NAME}-*.bottle.json
+              ${FORMULA_NAME}-*.bottle.*json
 
             git tag -a "$TAG_MESSAGE" -m "$TAG_MESSAGE"
             tag_array["$formula"]="$TAG_MESSAGE"
