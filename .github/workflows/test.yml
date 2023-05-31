@@ -9,9 +9,6 @@ on:
         required: true
         type: string
         description: What operating system to build on
-      config-path:
-        required: true
-        type: string
 jobs:
   build:
     runs-on: ubuntu-latest
