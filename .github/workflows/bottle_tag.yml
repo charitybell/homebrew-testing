@@ -3,6 +3,7 @@ on:
     inputs:
       formula:
         required: true
+        type: string
     outputs:
       tag-array:
         value: ${{ jobs.bottle.outputs.tag-array }}
