@@ -10,6 +10,11 @@ on:
         type: string
         description: What operating system to build on
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo '${{ github.event.inputs.os }}'
+      - run: echo '${{ fromJSON(github.event.inputs) }}'
   build:
     runs-on: ${{ github.event.inputs.os }}
     steps:
