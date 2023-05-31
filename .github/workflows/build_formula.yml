@@ -63,10 +63,11 @@ jobs:
               ${FORMULA_NAME}-*.bottle.*json
 
             git tag -a "$TAG_MESSAGE" -m "$TAG_MESSAGE"
-            TAG_ARRAY=$(echo $TAG_ARRAY | jq -rc ". += {"'"'"$formula"'"'":"'"'"$TAG_MESSAGE"'"'"}")
+            TAG_ARRAY=$(echo $TAG_ARRAY | jq -rc '. += {"'$formula'":"'$TAG_MESSAGE'"}')
           done
           git -c push.default=current push --tags
           git -c push.default=current push
+          echo $TAG_ARRAY
 
           echo "tag-array=$TAG_ARRAY" >> $GITHUB_OUTPUT
 
