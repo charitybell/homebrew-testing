@@ -18,12 +18,14 @@ jobs:
           fetch-depth: 0
 
   call:
+    needs: [prepare]
     uses: ./.github/workflows/build.yml
     with:
       formula: ${{ github.event.inputs.formula }}
       os: ${{ github.event.inputs.os }}
 
   check:
+    needs: [call]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
