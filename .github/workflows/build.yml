@@ -13,8 +13,7 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     steps:
-      - run: echo '${{ github.event.inputs.os }}'
-      - run: echo '${{ fromJSON(github.event.inputs) }}'
+      - run: echo '${{ fromJSON(github.event) }}'
   build:
     runs-on: ${{ github.event.inputs.os }}
     steps:
