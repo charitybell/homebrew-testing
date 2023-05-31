@@ -10,11 +10,8 @@ on:
         type: string
         description: What operating system to build on
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    steps:
   build:
-    runs-on: ${{ inputs.os }}
+    runs-on: ${{ github.event.inputs.os }}
     steps:
       - uses: actions/checkout@v3
         with:
