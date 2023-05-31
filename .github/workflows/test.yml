@@ -10,22 +10,22 @@ on:
         type: string
         description: What operating system to build on
 jobs:
-  build:
+  prepare:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - run: |
-          ls -la
-          ls -la .github
-          ls -la .github/workflows
-
+  call:
+    steps:
       - uses: ./.github/workflows/build.yml
         with:
           formula: ${{ github.event.inputs.formula }}
           os: ${{ github.event.inputs.os }}
+
+  check:
+    steps:
       - uses: actions/download-artifact@v3
         with:
           name: formula-bottles
