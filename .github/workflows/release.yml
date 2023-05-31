@@ -73,14 +73,8 @@ jobs:
       formula: ${{ matrix.formula }}
       os: ${{ matrix.os }}
 
-  tag:
-    needs: [prepare, build]
-    uses: ./.github/workflows/bottle_tag.yml
-    with:
-      formula: ${{ needs.prepare.outputs.formula }}
-
   release:
-    needs: [prepare, build, tag]
+    needs: [prepare, build]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -97,7 +91,7 @@ jobs:
 
       - id: get-tag-name
         run: |
-          TAG_NAME=$(echo '${{ needs.tag.outputs.tag-array }}' | jq -rc .['"'${{ matrix.formula }}'"'])
+          TAG_NAME=$(echo '${{ needs.build.outputs.tag-array }}' | jq -rc .['"'${{ matrix.formula }}'"'])
           echo $TAG_NAME
           echo "tag-name=$TAG_NAME" >> $GITHUB_OUTPUT
 
