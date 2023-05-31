@@ -13,10 +13,8 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     steps:
-      - name: foo
-        run: echo '${{ fromJSON(github.event) }}'
   build:
-    runs-on: ${{ github.event.inputs.os }}
+    runs-on: ${{ inputs.os }}
     steps:
       - uses: actions/checkout@v3
         with:
