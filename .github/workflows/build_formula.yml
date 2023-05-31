@@ -36,9 +36,10 @@ jobs:
         run: |
           FORMULA_NAME="${{ github.repository }}/$(basename ${{ inputs.formula }} .rb)"
           brew install --build-bottle "$FORMULA_NAME"
-          brew bottle --force-core-tap --no-rebuild --json \
+          brew bottle --force-core-tap --json \
             --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMULA_NAME/$FORMULA_VERSION \
             "$FORMULA_NAME"
+          ls
           BASE_FILENAME=$(basename $(jq -r '.[].bottle.tags|.[].filename' $FORMULA_NAME-*bottle.*json) .tar.gz)
           BASE_LOCAL_FILENAME=$(basename $(jq -r '.[].bottle.tags|.[].filename' $FORMULA_NAME-*bottle.*json) .tar.gz)
           mv $BASE_LOCAL_FILENAME.json $BASE_FILENAME.json
