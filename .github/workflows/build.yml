@@ -14,6 +14,9 @@ jobs:
   build:
     runs-on: ${{ github.event.inputs.os }}
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - run: echo ${{ github.event.inputs.formula }} >> ${{ github.event.inputs.formula }}.txt
       - uses: actions/upload-artifact@v3
         with:
