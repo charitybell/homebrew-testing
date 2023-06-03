@@ -87,13 +87,14 @@ jobs:
       - name: build bottle (${{ matrix.formula }})
         id: build-bottle
         run: |
-          FORMULA_NAME="${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)"
+          FORMULA_BASENAME=$(basename ${{ matrix.formula }} .rb)
+          FORMULA_NAME="${{ github.repository }}/$FORMULA_BASENAME"
           brew install --build-bottle "$FORMULA_NAME"
           brew bottle --force-core-tap --no-rebuild --json \
-            --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMULA_NAME/$FORMULA_VERSION \
+            --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMULA_BASENAME/$FORMULA_VERSION \
             "$FORMULA_NAME"
-          BASE_FILENAME=$(basename $(jq -r '.[].bottle.tags|.[].filename' $FORMULA_NAME-*bottle.*json) .tar.gz)
-          BASE_LOCAL_FILENAME=$(basename $(jq -r '.[].bottle.tags|.[].filename' $FORMULA_NAME-*bottle.*json) .tar.gz)
+          BASE_LOCAL_FILENAME=$(basename $(jq -r '.[].bottle.tags|.[].local_filename' $FORMULA_BASENAME-*bottle.*json) .tar.gz)
+          BASE_FILENAME=$(basename $(jq -r '.[].bottle.tags|.[].filename' $FORMULA_BASENAME-*bottle.*json) .tar.gz)
           mv $BASE_LOCAL_FILENAME.json $BASE_FILENAME.json
           mv $BASE_LOCAL_FILENAME.tar.gz $BASE_FILENAME.tar.gz
 
