@@ -8,6 +8,14 @@ class Feed2exec < Formula
   sha256 "29af89985b85f59d61c30af3ba2c7e65979fe1160808c8d8fd87da83a25de059"
   license "AGPL-3.0-only"
   head "https://gitlab.com/anarcat/feed2exec.git", branch: "main"
+
+  bottle do
+    root_url "https://github.com/charitybell/homebrew-charitybell/releases/download/feed2exec/"
+    sha256 cellar: :any_skip_relocation, ventura:      "87fb618963b0a0c71f2b4f7d8ed21f216f6730af89480471e43c7b9a17a330e1"
+    sha256 cellar: :any_skip_relocation, monterey:     "2ef6b5730403812bc96513e7b96bdc67f361567e88176759ff71c2369d41b176"
+    sha256 cellar: :any_skip_relocation, big_sur:      "2887baf32c210d6b3d930d40bf3b655558409a02a8b12826b50fd036c04435df"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "f901d8b2a64c07823ec6fda1fe69d662b51144df083cf443a8bd50ca02ef5f4c"
+  end
   depends_on "python"
 
   resource "CacheControl" do
