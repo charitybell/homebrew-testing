@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - 'main'
+    paths:
+      - 'Aliases/**.rb'
+      - 'Casks/**.rb'
+      - 'Formula/**.rb'
 
 jobs:
   prepare:
