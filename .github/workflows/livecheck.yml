@@ -12,15 +12,15 @@ jobs:
         with:
           fetch-depth: 1
 
-    - uses: Homebrew/actions/setup-homebrew@master
+      - uses: Homebrew/actions/setup-homebrew@master
 
-    - uses: dcarbone/install-jq-action@v1.0.1
+      - uses: dcarbone/install-jq-action@v1.0.1
 
-    - id: livecheck-results
-      run: echo "value=$(brew livecheck --tap ${{ github.repository }} --json --newer-only | jq -rc .)" >> $GITHUB_OUTPUT
+      - id: livecheck-results
+        run: echo "value=$(brew livecheck --tap ${{ github.repository }} --json --newer-only | jq -rc .)" >> $GITHUB_OUTPUT
 
-    - uses: JasonEtco/create-an-issue@v2
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        filename: .github/formula_update_template.md
+      - uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          filename: .github/formula_update_template.md
