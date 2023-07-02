@@ -89,10 +89,13 @@ jobs:
         run: |
           FORMULA_BASENAME=$(basename ${{ matrix.formula }} .rb)
           FORMULA_NAME="${{ github.repository }}/$FORMULA_BASENAME"
+          FORMULA_TAP=$(echo ${{ github.repository }} | cut -d / -f 1)/$(echo ${{ github.repository }} | cut -d / -f 2 | cut -d - -f 2)/$FORMULA_NAME
           brew install --build-bottle "$FORMULA_NAME"
           brew bottle --force-core-tap --no-rebuild --json \
-            --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMULA_BASENAME/$FORMULA_VERSION \
+            --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMULA_BASENAME/'{{XXX_FORMULA_VERSION}}' \
             "$FORMULA_NAME"
+          FORMULA_VERSION=$(jq -cr .['"'$FORMULA_TAP'"'].formula.pkg_version ${FORMULA_NAME}-*.bottle.json | head -n 1)
+          sed "s/{{XXX_FORMULA_VERSION}}/$FORMULA_NAME-$FORMULA_VERSION/" ${FORMULA_NAME}-*.bottle.json
           BASE_LOCAL_FILENAME=$(basename $(jq -r '.[].bottle.tags|.[].local_filename' $FORMULA_BASENAME-*bottle.*json) .tar.gz)
           BASE_FILENAME=$(basename $(jq -r '.[].bottle.tags|.[].filename' $FORMULA_BASENAME-*bottle.*json) .tar.gz)
           mv $BASE_LOCAL_FILENAME.json $BASE_FILENAME.json
@@ -138,7 +141,7 @@ jobs:
             TAG_MESSAGE="${FORMULA_NAME}-${FORMULA_VERSION}"
 
             brew bottle --merge --write \
-              --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMULA_NAME/$FORMULA_VERSION \
+              --root-url ${{ github.server_url }}/${{ github.repository }}/releases/download/$FORMULA_NAME-$FORMULA_VERSION \
               ${FORMULA_NAME}-*.bottle.json
 
             git tag -a "$TAG_MESSAGE" -m "$TAG_MESSAGE"
