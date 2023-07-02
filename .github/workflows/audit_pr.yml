@@ -63,7 +63,7 @@ jobs:
             ${{ github.repository }}/$(basename ${{ matrix.formula }} .rb)
 
   install:
-    needs: prepare
+    needs: [prepare, audit]
     if: '!cancelled()'
     strategy:
       matrix:
