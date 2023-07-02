@@ -45,9 +45,7 @@ jobs:
 
       - uses: Homebrew/actions/setup-homebrew@master
 
-      - uses: charitybell/set-git-url-action@main
-        with:
-          token: ${{ github.token }}
+      - uses: charitybell/set-git-creds@main
 
       - name: tag casks
         run: |
@@ -80,9 +78,7 @@ jobs:
 
       - uses: Homebrew/actions/setup-homebrew@master
 
-      - uses: charitybell/set-git-url-action@main
-        with:
-          token: ${{ github.token }}
+      - uses: charitybell/set-git-creds@main
 
       - name: build bottle (${{ matrix.formula }})
         id: build-bottle
@@ -125,9 +121,7 @@ jobs:
 
       - uses: dcarbone/install-jq-action@v1.0.1
 
-      - uses: charitybell/set-git-url-action@main
-        with:
-          token: ${{ github.token }}
+      - uses: charitybell/set-git-creds@main
 
       - name: bottle and tag
         id: bottle-and-tag
