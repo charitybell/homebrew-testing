@@ -5,6 +5,7 @@ class Stash < Formula
   sha256 "1eaef744ce856afe71857381fb832c29fc0c43eefc6336c60c30be36b929c71b"
   license "AGPL-3.0-only"
   head "https://github.com/stashapp/stash.git", branch: "develop"
+  revision 1
 
   bottle do
     sha256 cellar: :any_skip_relocation, ventura:      "5e31dc24ebca94c767303fa82410a83f0236c95778ae87e01a49f57a18a2e7ae"
@@ -18,6 +19,11 @@ class Stash < Formula
   depends_on "node" => :build
   depends_on "yarn" => :build
   depends_on "ffmpeg"
+
+  service do
+    run [bin/"stash"]
+    keep_alive crashed: true
+  end
 
   def install
     ENV.deparallelize
