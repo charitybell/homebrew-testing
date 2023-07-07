@@ -46,7 +46,7 @@ jobs:
 
   audit:
     needs: prepare
-    if: ${{ needs.prepare.outputs.formula != '[]' }}
+    if: ${{ needs.prepare.outputs.formula != '[]' && needs.prepare.outputs.formula != '' }}
     strategy:
       matrix:
         formula: ${{ fromJSON(needs.prepare.outputs.formula) }}
