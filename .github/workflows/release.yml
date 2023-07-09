@@ -89,7 +89,7 @@ jobs:
         id: build-bottle
         run: |
           FORMULA_BASENAME=$(basename ${{ matrix.formula }} .rb)
-          FORMULA_TAP=$(echo ${{ github.repository }} | cut -d / -f 1)/$(echo ${{ github.repository }} | cut -d / -f 2 | cut -d - -f 2)/$FORMULA_NAME
+          FORMULA_TAP=$(echo ${{ github.repository }} | cut -d / -f 1)/$(echo ${{ github.repository }} | cut -d / -f 2 | cut -d - -f 2)
           FORMULA_NAME="$FORMULA_TAP/$FORMULA_BASENAME"
           brew install --build-bottle "$FORMULA_NAME"
           brew bottle --force-core-tap --no-rebuild --json \
