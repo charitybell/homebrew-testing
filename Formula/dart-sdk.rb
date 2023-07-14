@@ -6,6 +6,14 @@ class DartSdk < Formula
   license "BSD-3-Clause"
   head "https://github.com/dart-lang/sdk.git", branch: "main"
 
+  bottle do
+    root_url "https://github.com/charitybell/homebrew-charitybell/releases/download/dart-sdk/{{XXX_FORMULA_VERSION}}"
+    sha256 cellar: :any_skip_relocation, ventura:      "a27bdc658522f07d8b9499a7957aae98342bc9bdb6f462c149f5ff48f5d7c8f7"
+    sha256 cellar: :any_skip_relocation, monterey:     "7110d5f88b6ff03e1112961cff0f3cc7fd66504a9928fd288c4e7ba62d9b49bf"
+    sha256 cellar: :any_skip_relocation, big_sur:      "3e22ef293ca832eb59f8619d459c965b4daf645cc99924266848359a188a5f63"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "8267e1b501ba31d65b1ade693867936f8b4f05e821f2df051f9b53620a379e69"
+  end
+
   depends_on xcode: :build
   uses_from_macos "python@3.11" => :build
 
