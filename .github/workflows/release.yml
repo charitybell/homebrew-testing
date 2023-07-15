@@ -99,9 +99,7 @@ jobs:
           FORMULA_BASENAME="$(basename "$FORMULA" .rb)"
           FORMULA_TAP="$(echo "$GITHUB_REPOSITORY" | cut -d / -f 1)/$(echo "$GITHUB_REPOSITORY" | cut -d / -f 2 | cut -d - -f 2)"
           FORMULA_NAME="$FORMULA_TAP/$FORMULA_BASENAME"
-          if [ "$(echo '${{ matrix.os }} | cut -d - -f 1')" = 'macos' ] && [ grep 'depends_on .python@.*' "$FORMULA" ]; then
-            #rm /usr/local/bin/2to3*
-            #rm /usr/local/bin/idle*
+          if [ "$(echo '${{ matrix.os }}' | cut -d - -f 1)" = 'macos' ] && [ grep 'depends_on .python@.*' "$FORMULA" ]; then
             brew rm python3
           fi
           brew install --build-bottle "$FORMULA_NAME"

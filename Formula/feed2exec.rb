@@ -8,7 +8,7 @@ class Feed2exec < Formula
   sha256 "29af89985b85f59d61c30af3ba2c7e65979fe1160808c8d8fd87da83a25de059"
   license "AGPL-3.0-only"
   head "https://gitlab.com/anarcat/feed2exec.git", branch: "main"
-  revision 3
+  revision 4
 
   bottle do
     root_url "https://github.com/charitybell/homebrew-charitybell/releases/download/feed2exec/"
