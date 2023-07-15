@@ -155,7 +155,9 @@ jobs:
             echo $BOTTLE_FILE
             FORMULA_TAP="$(echo "$GITHUB_REPOSITORY" | cut -d / -f 1)/$(echo "$GITHUB_REPOSITORY" | cut -d / -f 2 | cut -d - -f 2)"
             echo $FORMULA_TAP
-            jq -r .['"'"$FORMUA_TAP/$FORMULA_NAME"'"'] "$BOTTLE_FILE"
+            FORMULA_FULL_NAME="$FORMULA_TAP/$FORMULA_NAME"
+            echo "$FORMULA_FULL_NAME"
+            jq -r .['"'"$FORMULA_FULL_NAME"'"'] "$BOTTLE_FILE"
             cat "$BOTTLE_FILE"
             FORMULA_VERSION=$(jq -cr .['"'$FORMULA_TAP'"'].formula.pkg_version "$BOTTLE_FILE")
             TAG_MESSAGE="${FORMULA_NAME}-${FORMULA_VERSION}"
