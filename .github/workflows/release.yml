@@ -103,7 +103,9 @@ jobs:
             rm -f /usr/local/bin/{2to3,python,idle,python*-config,pydoc}*
           fi
           brew install --build-bottle "$FORMULA_NAME"
-          FORMULA_VERSION="$(brew info --json "$FORMULA_BASENAME" | jq -rc '.[0].versions.stable')"
+          brew info --json "$FORMULA_NAME"
+          brew info --json "$FORMULA_NAME" | jq -rc '.[0].versions.stable'
+          FORMULA_VERSION="$(brew info --json "$FORMULA_NAME" | jq -rc '.[0].versions.stable')"
           brew bottle --force-core-tap --no-rebuild --json \
             --root-url "$GITHUB_REPO_URL/releases/download/$FORMULA_BASENAME-$FORMULA_VERSION" \
             "$FORMULA_NAME"
