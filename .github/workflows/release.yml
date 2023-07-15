@@ -100,11 +100,10 @@ jobs:
           FORMULA_TAP="$(echo "$GITHUB_REPOSITORY" | cut -d / -f 1)/$(echo "$GITHUB_REPOSITORY" | cut -d / -f 2 | cut -d - -f 2)"
           FORMULA_NAME="$FORMULA_TAP/$FORMULA_BASENAME"
           if [ "$(echo '${{ matrix.os }}' | cut -d - -f 1)" = 'macos' ] && grep 'depends_on .python@.*' "$FORMULA"; then
+            # github's macos runners come with python, which breaks formulae that depend on python
             rm -f /usr/local/bin/{2to3,python,idle,python*-config,pydoc}*
           fi
           brew install --build-bottle "$FORMULA_NAME"
-          brew info --json "$FORMULA_NAME"
-          brew info --json "$FORMULA_NAME" | jq -rc '.[0].versions.stable'
           FORMULA_VERSION="$(brew info --json "$FORMULA_NAME" | jq -rc '.[0].versions.stable')"
           brew bottle --force-core-tap --no-rebuild --json \
             --root-url "$GITHUB_REPO_URL/releases/download/$FORMULA_BASENAME-$FORMULA_VERSION" \
@@ -190,6 +189,9 @@ jobs:
 
       - id: get-tag-name
         run: |
+          echo '${{ matrix.formula }}'
+          echo '${{ needs.tag.outputs.tag-array }}'
+          echo '${{ needs.tag.outputs.tag-array }}' | jq -rc .['"'${{ matrix.formula }}'"']
           TAG_NAME=$(echo '${{ needs.tag.outputs.tag-array }}' | jq -rc .['"'${{ matrix.formula }}'"'])
           echo "tag-name=$TAG_NAME" >> "$GITHUB_OUTPUT"
 
