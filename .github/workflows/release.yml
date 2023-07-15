@@ -154,8 +154,10 @@ jobs:
             BOTTLE_FILE="$(find . -type f -name "$FORMULA_NAME-*bottle.*json" -print -quit)"
             echo $BOTTLE_FILE
             FORMULA_TAP="$(echo "$GITHUB_REPOSITORY" | cut -d / -f 1)/$(echo "$GITHUB_REPOSITORY" | cut -d / -f 2 | cut -d - -f 2)"
+            echo $FORMULA_TAP
+            jq -r .['"'"$FORMUA_TAP"'"'] "$BOTTLE_FILE"
+            cat "$BOTTLE_FILE"
             FORMULA_VERSION=$(jq -cr .['"'$FORMULA_TAP'"'].formula.pkg_version "$BOTTLE_FILE")
-            jq -cr .['"'$FORMULA_TAP'"'].formula.pkg_version "$BOTTLE_FILE"
             TAG_MESSAGE="${FORMULA_NAME}-${FORMULA_VERSION}"
 
             brew bottle --merge --write \
