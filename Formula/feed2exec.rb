@@ -17,7 +17,6 @@ class Feed2exec < Formula
     sha256 cellar: :any_skip_relocation, big_sur:      "2887baf32c210d6b3d930d40bf3b655558409a02a8b12826b50fd036c04435df"
     sha256 cellar: :any_skip_relocation, x86_64_linux: "f901d8b2a64c07823ec6fda1fe69d662b51144df083cf443a8bd50ca02ef5f4c"
   end
-  uses_from_macos "python@3.11"
 
   resource "CacheControl" do
     url "https://files.pythonhosted.org/packages/9e/65/3356cfc87bdee0cdf62d941235e936a26c205e4f1e1f2c85dbd952d7533a/cachecontrol-0.13.1.tar.gz"
