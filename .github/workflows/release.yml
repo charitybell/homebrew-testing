@@ -152,6 +152,7 @@ jobs:
           for formula in $(echo '${{ needs.prepare.outputs.formula }}' | jq -rc .[]); do
             FORMULA_NAME="$(basename "$formula" .rb)"
             BOTTLE_FILE="$(find . -type f -name "$FORMULA_NAME-*bottle.*json" -print -quit)"
+            FORMULA_TAP="$(echo "$GITHUB_REPOSITORY" | cut -d / -f 1)/$(echo "$GITHUB_REPOSITORY" | cut -d / -f 2 | cut -d - -f 2)"
             FORMULA_VERSION=$(jq -cr .['"'$FORMULA_TAP'"'].formula.pkg_version ${FORMULA_NAME}-*.bottle.json | head -n 1)
             TAG_MESSAGE="${FORMULA_NAME}-${FORMULA_VERSION}"
 
