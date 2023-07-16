@@ -104,7 +104,7 @@ jobs:
             rm -f /usr/local/bin/{2to3,python,idle,python*-config,pydoc}*
           fi
           brew install --build-bottle "$FORMULA_NAME"
-          FORMULA_VERSION="$(brew info --json "$FORMULA_NAME" | jq -rc '.[0].versions.stable')"
+          FORMULA_VERSION="$(brew info --json "$FORMULA_NAME" | jq -rc '.[0].installed[0].version')"
           brew bottle --force-core-tap --no-rebuild --json \
             --root-url "$GITHUB_REPO_URL/releases/download/$FORMULA_BASENAME-$FORMULA_VERSION" \
             "$FORMULA_NAME"
@@ -155,9 +155,7 @@ jobs:
             FORMULA_TAP="$(echo "$GITHUB_REPOSITORY" | cut -d / -f 1)/$(echo "$GITHUB_REPOSITORY" | cut -d / -f 2 | cut -d - -f 2)"
             FORMULA_FULL_NAME="$FORMULA_TAP/$FORMULA_NAME"
             FORMULA_VERSION=$(jq -cr .['"'"$FORMULA_FULL_NAME"'"'].formula.pkg_version "$BOTTLE_FILE")
-            echo "$FORMULA_VERSION"
             TAG_MESSAGE="${FORMULA_NAME}-${FORMULA_VERSION}"
-            echo "$TAG_MESSAGE"
 
             brew bottle --merge --write \
               --root-url "$GITHUB_REPO_URL/releases/download/$FORMULA_NAME-$FORMULA_VERSION" \
