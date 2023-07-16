@@ -152,15 +152,13 @@ jobs:
           for formula in $(echo '${{ needs.prepare.outputs.formula }}' | jq -rc .[]); do
             FORMULA_NAME="$(basename "$formula" .rb)"
             BOTTLE_FILE="$(find . -type f -name "$FORMULA_NAME-*bottle.*json" -print -quit)"
-            echo $BOTTLE_FILE
             FORMULA_TAP="$(echo "$GITHUB_REPOSITORY" | cut -d / -f 1)/$(echo "$GITHUB_REPOSITORY" | cut -d / -f 2 | cut -d - -f 2)"
-            echo $FORMULA_TAP
             FORMULA_FULL_NAME="$FORMULA_TAP/$FORMULA_NAME"
-            echo "$FORMULA_FULL_NAME"
-            jq -r .['"'"$FORMULA_FULL_NAME"'"'] "$BOTTLE_FILE"
-            cat "$BOTTLE_FILE"
-            FORMULA_VERSION=$(jq -cr .['"'$FORMULA_TAP'"'].formula.pkg_version "$BOTTLE_FILE")
+            jq -r .['"'"$FORMULA_FULL_NAME"'"'].formula "$BOTTLE_FILE"
+            FORMULA_VERSION=$(jq -cr .['"'"$FORMULA_TAP"'"'].formula.pkg_version "$BOTTLE_FILE")
+            echo "$FORMULA_VERSION"
             TAG_MESSAGE="${FORMULA_NAME}-${FORMULA_VERSION}"
+            echo "$TAG_MESSAGE"
 
             brew bottle --merge --write \
               --root-url "$GITHUB_REPO_URL/releases/download/$FORMULA_NAME-$FORMULA_VERSION" \
