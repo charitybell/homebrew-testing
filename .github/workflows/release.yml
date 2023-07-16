@@ -154,8 +154,7 @@ jobs:
             BOTTLE_FILE="$(find . -type f -name "$FORMULA_NAME-*bottle.*json" -print -quit)"
             FORMULA_TAP="$(echo "$GITHUB_REPOSITORY" | cut -d / -f 1)/$(echo "$GITHUB_REPOSITORY" | cut -d / -f 2 | cut -d - -f 2)"
             FORMULA_FULL_NAME="$FORMULA_TAP/$FORMULA_NAME"
-            jq -r .['"'"$FORMULA_FULL_NAME"'"'].formula "$BOTTLE_FILE"
-            FORMULA_VERSION=$(jq -cr .['"'"$FORMULA_TAP"'"'].formula.pkg_version "$BOTTLE_FILE")
+            FORMULA_VERSION=$(jq -cr .['"'"$FORMULA_FULL_NAME"'"'].formula.pkg_version "$BOTTLE_FILE")
             echo "$FORMULA_VERSION"
             TAG_MESSAGE="${FORMULA_NAME}-${FORMULA_VERSION}"
             echo "$TAG_MESSAGE"
