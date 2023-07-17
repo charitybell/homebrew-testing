@@ -11,11 +11,8 @@ class Feed2exec < Formula
   revision 20
 
   bottle do
-    root_url "https://github.com/charitybell/homebrew-charitybell/releases/download/feed2exec/"
-    sha256 cellar: :any_skip_relocation, ventura:      "87fb618963b0a0c71f2b4f7d8ed21f216f6730af89480471e43c7b9a17a330e1"
-    sha256 cellar: :any_skip_relocation, monterey:     "2ef6b5730403812bc96513e7b96bdc67f361567e88176759ff71c2369d41b176"
-    sha256 cellar: :any_skip_relocation, big_sur:      "2887baf32c210d6b3d930d40bf3b655558409a02a8b12826b50fd036c04435df"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "f901d8b2a64c07823ec6fda1fe69d662b51144df083cf443a8bd50ca02ef5f4c"
+    root_url "https://github.com/charitybell/homebrew-testing/releases/download/feed2exec-0.19.0_20"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "922c73549d5b32eeb97c5295a44d9baa919698da014fb8324a15a67446d6c925"
   end
   depends_on "python@3.11"
 
