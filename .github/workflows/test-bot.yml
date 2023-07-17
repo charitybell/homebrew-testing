@@ -4,5 +4,6 @@ on: [pull_request]
 
 jobs:
   test-bot:
+    runs-on: ubuntu-latest
     steps:
       - run: brew test-bot; ls
