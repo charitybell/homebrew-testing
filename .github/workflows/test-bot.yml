@@ -1,0 +1,8 @@
+name: test-bot
+
+on: [pull_request]
+
+jobs:
+  test-bot:
+    steps:
+      - run: brew test-bot; ls
