@@ -1,8 +1,8 @@
 class StashBox < Formula
   desc "OpenSource video indexing and Perceptual Hashing MetaData API"
   homepage "https://github.com/stashapp/stash-box"
-  url "https://github.com/stashapp/stash-box/archive/refs/tags/v0.4.6.tar.gz"
-  sha256 "28b929a03bb2abb3a141f33fd5c811a450c976ca325934f9c9cfcdfec6b65f30"
+  url "https://github.com/stashapp/stash-box/archive/refs/tags/v0.4.7.tar.gz"
+  sha256 "76865ac41b5d4bdbbdba8c2035af57938bd769b62f1000dfc065ee4f3c3a3008"
   license "MIT"
   head "https://github.com/stashapp/stash-box.git", branch: "master"
 
