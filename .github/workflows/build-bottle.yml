@@ -1,0 +1,55 @@
+on:
+  workflow_call:
+    inputs:
+      formula:
+        required: true
+        type: string
+      runs-on:
+        required: true
+        type: string
+
+jobs:
+  build-bottle:
+    name: build bottle (${{ inputs.formula }})
+    runs-on: ${{ inputs.runs-on }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - uses: Homebrew/actions/git-user-config@master
+
+      - uses: Homebrew/actions/setup-homebrew@master
+
+      - uses: charitybell/set-git-creds@main
+
+      - name: build bottle (${{ inputs.formula }})
+        id: build-bottle
+        env:
+          FORMULA: ${{ inputs.formula }}
+          GITHUB_REPO_URL: ${{ github.server_url}}/${{ github.repository }}
+        run: |
+          FORMULA_BASENAME="$(basename "$FORMULA" .rb)"
+          FORMULA_TAP="$(echo "$GITHUB_REPOSITORY" | cut -d / -f 1)/$(echo "$GITHUB_REPOSITORY" | cut -d / -f 2 | cut -d - -f 2)"
+          FORMULA_NAME="$FORMULA_TAP/$FORMULA_BASENAME"
+          if [[ '${{ inputs.runs-on }}' = macos-* ]] && grep 'depends_on .python@.*' "$FORMULA"; then
+            # github's macos runners come with python, which breaks formulae that depend on python
+            rm -f /usr/local/bin/{2to3,python,idle,python*-config,pydoc}*
+          fi
+          brew install --build-bottle "$FORMULA_NAME"
+          FORMULA_VERSION="$(brew info --json "$FORMULA_NAME" | jq -rc '.[0].installed[0].version')"
+          brew bottle --force-core-tap --no-rebuild --json \
+            --root-url "$GITHUB_REPO_URL/releases/download/$FORMULA_BASENAME-$FORMULA_VERSION" \
+            "$FORMULA_NAME"
+          BOTTLE_FILE="$(find . -type f -name "$FORMULA_BASENAME-*bottle.*json" -print -quit)"
+          BASE_LOCAL_FILENAME="$(basename "$(jq -r '.[].bottle.tags|.[].local_filename' "$BOTTLE_FILE")" .tar.gz)"
+          BASE_FILENAME="$(basename "$(jq -r '.[].bottle.tags|.[].filename' "$BOTTLE_FILE")" .tar.gz)"
+          mv "$BASE_LOCAL_FILENAME.json" "$BASE_FILENAME.json"
+          mv "$BASE_LOCAL_FILENAME.tar.gz" "$BASE_FILENAME.tar.gz"
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: formula-bottles
+          path: |
+            *.bottle.tar.gz
+            *.bottle.json
