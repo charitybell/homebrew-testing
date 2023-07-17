@@ -29,20 +29,16 @@ jobs:
           FORMULA: ${{ inputs.formula }}
           GITHUB_REPO_URL: ${{ github.server_url}}/${{ github.repository }}
         run: |
-          echo $FORMULA
           FORMULA_BASENAME="$(basename "$FORMULA" .rb)"
-          echo $FORMULA_BASENAME
           FORMULA_TAP="$(echo "$GITHUB_REPOSITORY" | cut -d / -f 1)/$(echo "$GITHUB_REPOSITORY" | cut -d / -f 2 | cut -d - -f 2)"
-          echo $FORMULA_TAP
           FORMULA_NAME="$FORMULA_TAP/$FORMULA_BASENAME"
-          echo $FORMULA_NAME
-          if [[ '${{ inputs.runs-on }}' = macos-* ]] && grep 'depends_on .python@.*' "$FORMULA"; then
+          # shellcheck disable=SC2193
+          if [[ '${{ inputs.runs-on }}' == macos-* ]] && grep 'depends_on .python@.*' "$FORMULA"; then
             # github's macos runners come with python, which breaks formulae that depend on python
             rm -f /usr/local/bin/{2to3,python,idle,python*-config,pydoc}*
           fi
           brew install --build-bottle "$FORMULA_NAME"
           FORMULA_VERSION="$(brew info --json "$FORMULA_NAME" | jq -rc '.[0].installed[0].version')"
-          echo $FORMULA_VERSION
           brew bottle --force-core-tap --no-rebuild --json \
             --root-url "$GITHUB_REPO_URL/releases/download/$FORMULA_BASENAME-$FORMULA_VERSION" \
             "$FORMULA_NAME"
