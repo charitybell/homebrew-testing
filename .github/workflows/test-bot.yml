@@ -6,4 +6,10 @@ jobs:
   test-bot:
     runs-on: ubuntu-latest
     steps:
-      - run: brew test-bot; ls
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - uses: Homebrew/actions/setup-homebrew@master
+
+      - run: brew test-bot && ls || ls
